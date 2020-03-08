@@ -50,17 +50,21 @@ const deleteIssue = id => {
 const fetchIssues = () => {
     const issues = JSON.parse(localStorage.getItem('issues'));
     const issuesList = document.getElementById('issuesList');
-    document.getElementById('issueCount').innerText = issues.length || null;
-    issuesList.innerHTML = '';
 
+
+    issuesList.innerHTML = '';
+    let closedIssue = 0;
+    let openIssue = 0;
     for (var i = 0; i < issues.length; i++) {
         const { id, description, severity, assignedTo, status } = issues[i];
         let descriptionToShow = null,
             closeBtn = null;
         if (status === 'Closed') {
+            closedIssue++;
             descriptionToShow = `<h3 style="text-decoration:line-through"> ${description} </h3>`;
             closeBtn = ` <a href="javascript:void(0)"  disabled class="btn btn-warning">Close</a>`;
         } else {
+            openIssue++;
             descriptionToShow = `<h3> ${description} </h3>`;
             closeBtn = `<a href="javascript:void(0)" onclick="setStatusClosed(${id})" class="btn btn-warning">Close</a>`
         }
@@ -75,4 +79,8 @@ const fetchIssues = () => {
                               <a href="javascript:void(0)" onclick="deleteIssue(${id})" class="btn btn-danger">Delete</a>
                               </div>`;
     }
+    document.getElementById('OpenIssueCount').innerText = openIssue;
+    document.getElementById('closedIssueCount').innerText = closedIssue;
+    document.getElementById('totalIssueCount').innerText = openIssue + closedIssue;
+
 }
